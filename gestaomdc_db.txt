@@ -1,0 +1,19 @@
+create database gestaomdc_db;
+use gestaomdc_db;
+
+create table agendamento(
+	id int not null auto_increment,
+    cliente varchar(100) not null,
+    telefone varchar(100) not null,
+    idservico int not null,
+    agendamentoData date not null,
+    horario time not null,
+    primary key(id),
+    constraint fk_agendamento_servico foreign key(idServico) references servicos(id)
+);
+
+create table servicos(
+	id int not null auto_increment,
+    nome varchar(255) not null,
+    primary key(id)
+);

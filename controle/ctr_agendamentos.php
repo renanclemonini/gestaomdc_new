@@ -37,6 +37,15 @@ $objAgendamentos = new Agendamento();
             $objAgendamentos->redirect('../lista-agendamentos.php');
         }
     }
+    
+    if(isset($_POST['filter']))
+    {
+        $dataFiltro = $_POST['txtDateChooser'];
+        if($objAgendamentos->filter($dataFiltro))
+        {
+            $objAgendamentos->redirect('../lista-agendamentos.php');
+        }
+    }
 
 
 

@@ -1,6 +1,12 @@
 create database gestaomdc_db;
 use gestaomdc_db;
 
+create table servicos(
+	id int not null auto_increment,
+    nome varchar(255) not null,
+    primary key(id)
+);
+
 create table agendamento(
 	id int not null auto_increment,
     cliente varchar(100) not null,
@@ -12,8 +18,17 @@ create table agendamento(
     constraint fk_agendamento_servico foreign key(idServico) references servicos(id)
 );
 
-create table servicos(
-	id int not null auto_increment,
-    nome varchar(255) not null,
-    primary key(id)
-);
+
+SELECT a.id, a.cliente as 'Cliente', a.telefone as 'Telefone', serv.nome as 'Servico', a.agendamentoData as 'Data', a.horario as 'Horario' 
+from agendamento a inner join servicos serv on a.idServico = serv.id;
+
+select * from agendamento;
+desc agendamento;
+
+select id as 'Id', nome as 'Nome' from servicos;
+
+SELECT a.id, a.cliente as 'Nome', a.telefone as 'Telefone', serv.nome as 'Servico', date_format(a.agendamentoData, '%d/%m/%Y') as 'Data', a.horario as 'Horario' 
+from agendamento a 
+inner join servicos serv on a.idServico = serv.id 
+WHERE a.agendamentoData = '2023-05-23'
+ORDER BY a.agendamentoData = '2023-05-23', a.horario DESC;

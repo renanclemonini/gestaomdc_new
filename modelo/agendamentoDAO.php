@@ -45,13 +45,39 @@ class Agendamento{
             echo $ex->getMessage();
         }
     }
-    
+
+    public function filter($dateChoosed)
+    {
+        try
+        {
+            $sql = "SELECT a.id, a.cliente as 'Nome', a.telefone as 'Telefone', serv.nome as 'Servico', date_format(a.agendamentoData, '%d/%m/%Y') as 'Data', a.horario as 'Horario'
+            from agendamento a 
+            inner join servicos serv on a.idServico = serv.id 
+            WHERE a.agendamentoData = :dateChoosed
+            ORDER BY a.horario";
+            $stmt = $this->conn->prepare($sql);
+            $stmt->bindParam(':dateChoosed', $dateChoosed); 
+            $stmt->execute();
+
+            return $stmt;
+        }
+        catch(PDOException $ex)
+        {
+            echo $ex->getMessage();
+        }
+    }
+
     public function read()
     {
         try
         {
-            $sql = "SELECT id as 'Id', nome as 'Nome' from servicos";
+            $sql = "SELECT a.id, a.cliente as 'Nome', a.telefone as 'Telefone', serv.nome as 'Servico', a.agendamentoData as 'Data', a.horario as 'Horario' 
+            from agendamento a 
+            inner join servicos serv on a.idServico = serv.id 
+            WHERE a.agendamentoData;
+            ORDER BY a.horario ASC";
             $stmt = $this->conn->prepare($sql);
+            $stmt->execute();
             
             return $stmt;
         }

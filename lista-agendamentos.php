@@ -32,14 +32,15 @@ $objServicos = new Servicos();
     <header> <?php include './nav.php' ?> </header>
     <div class="container">
         <h2 class="my-3">Agendamentos</h2>
-        <p>Lista de Agendamentos Realizados</p>
-        <form action="ctr_agendamentos.php" method="get">
-            <p>
-                <label for="iDateChooser">Data:</label>
-                <input type="date" name="txtDateChooser" id="iDateChooser" required>
-                <input type="submit" value="Filtrar">
-            </p>
-        </form>
+        <p>Lista de Agendamentos Realizados.</p>
+        <div id="filtrar">
+            <form action="lista-agendamentos.php" method="post">
+                <label for="iDateChooser">Filtro Atual: </label>
+                <input type="hidden" name="filter">
+                <input class="mx-2" type="date" name="txtDateChooser" id="iDateChooser" autofocus required>
+                <input type="submit" value="Filtrar" class="mx-2 mb-3">
+            </form>
+        </div>
         <table class="table table-striped text-center">
             <thead>
                 <tr>
@@ -53,10 +54,24 @@ $objServicos = new Servicos();
                 </tr>
             </thead>
             <tbody>
+                
                 <?php
-                    $sql = "SELECT a.id, a.cliente as 'Nome', a.telefone as 'Telefone', serv.nome as 'Servico', a.agendamentoData as 'Data', a.horario as 'Horario' from agendamento a inner join servicos serv on a.idServico = serv.id ORDER BY a.agendamentoData, a.horario" ;
-                    $stmt = $objAgendamentos->runQuery($sql);
-                    $stmt->execute();
+                    date_default_timezone_set('America/Bahia');
+                    $dia = date('d');
+                    $mes = date('m');
+                    $ano = date('Y');
+                    $dateAgenda = $_POST['txtDateChooser'] ?? "$ano-$mes-$dia";
+                    function dataEngToBr($dateAgenda)
+                    {
+                        if (!empty($dateAgenda))
+                        {
+                            $dateAgenda = explode("-", $dateAgenda);
+                            return $dateAgenda[2].'/'.$dateAgenda[1].'/'.$dateAgenda[0];
+                        }
+                    }
+                    $dataFormatada = dataEngToBr($dateAgenda);
+                    echo "<p>Exibindo agendamentos do dia $dataFormatada</p>";
+                    $stmt = $objAgendamentos->filter($dateAgenda);
                     while ($objAgendamentos = $stmt->fetch(PDO::FETCH_ASSOC)) {
                 ?>
                         <tr>
@@ -252,6 +267,19 @@ $objServicos = new Servicos();
 
             var modal = $(this);
             modal.find('#iId').val(recipientId);
+        });
+    </script>
+
+    <!-- JQuery Filtrar -->
+    <script>
+        $('#filtrar').on('show.bs.modal', function(event){
+            var button = $(event.relatedTarget);
+            // var recipientId = button.data('id');
+            var recipientDataAgendamento = input.data('txtDataChoosed');
+            
+            var modal = $(this);
+            // modal.find('#iId').val(recipientId);
+            modal.find('#iDateChooser').val(recipientDataAgendamento);
         });
     </script>
 

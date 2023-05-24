@@ -17,7 +17,7 @@ $objServicos = new Servicos();
     <?php include './bs4.php' ?>
     <title>Novo Agendamentos</title>
     <style>
-        main{
+        .main{
             width: 450px;
             margin: 10px auto;
             border: 1px solid black;
@@ -37,13 +37,13 @@ $objServicos = new Servicos();
 </head>
 <body>
     <header> <?php include './nav.php' ?> </header>
-    <main>
+    <main class="main">
         <h1 class="mb-3 text-center" >Agendamento</h1>
         <form class="formAlign" action="./controle/ctr_agendamentos.php" method="post">
             <input type="hidden" name="insert">
             <p class="formAlign">
                 <label for="iNome">Nome Completo:</label>
-                <input class="text-center larguraInput" type="text" name="txtNome" id="iNome" placeholder="Digite seu nome aqui" required>
+                <input class="text-center larguraInput" type="text" name="txtNome" id="iNome" placeholder="Digite seu nome aqui" autofocus required>
             </p>
             <p class="formAlign">
                 <label for="iTelefone">Telefone:</label>
